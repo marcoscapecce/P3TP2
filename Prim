@@ -1,0 +1,40 @@
+package Logica;
+
+import java.util.*;
+
+public class Prim {
+
+    public static List<Sendero> arbolGeneradorMinimo(GrafoParque grafo) {
+        List<Sendero> resultado = new ArrayList<>();
+        Set<Estacion> visitadas = new HashSet<>();
+        PriorityQueue<Sendero> cola = new PriorityQueue<>(Comparator.comparingInt(Sendero::getImpactoAmbiental));
+
+        if (grafo.getEstaciones().isEmpty()) return resultado;
+
+        Estacion origen = grafo.getEstaciones().get(0);
+        visitadas.add(origen);
+        agregarAristas(grafo, cola, origen, visitadas);
+
+        while (!cola.isEmpty() && visitadas.size() < grafo.getEstaciones().size()) {
+            Sendero actual = cola.poll();
+
+            Estacion destino = visitadas.contains(actual.getOrigen()) ? actual.getDestino() : actual.getOrigen();
+            if (visitadas.contains(destino)) continue;
+
+            resultado.add(actual);
+            visitadas.add(destino);
+            agregarAristas(grafo, cola, destino, visitadas);
+        }
+
+        return resultado;
+    }
+
+    private static void agregarAristas(GrafoParque grafo, PriorityQueue<Sendero> cola, Estacion estacion, Set<Estacion> visitadas) {
+        for (Sendero s : grafo.getSenderos()) {
+            if ((s.getOrigen().equals(estacion) && !visitadas.contains(s.getDestino())) ||
+                (s.getDestino().equals(estacion) && !visitadas.contains(s.getOrigen()))) {
+                cola.add(s);
+            }
+        }
+    }
+}
