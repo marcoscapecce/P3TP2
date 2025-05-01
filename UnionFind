@@ -1,0 +1,29 @@
+package Logica;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class UnionFind {
+    private Map<Estacion, Estacion> parent = new HashMap<>();
+
+    public UnionFind(Iterable<Estacion> estaciones) {
+        for (Estacion e : estaciones) {
+            parent.put(e, e);
+        }
+    }
+
+    private Estacion find(Estacion e) {
+        if (parent.get(e) != e) {
+            parent.put(e, find(parent.get(e)));
+        }
+        return parent.get(e);
+    }
+
+    public boolean union(Estacion a, Estacion b) {
+        Estacion rootA = find(a);
+        Estacion rootB = find(b);
+        if (rootA == rootB) return false;
+        parent.put(rootA, rootB);
+        return true;
+    }
+}
