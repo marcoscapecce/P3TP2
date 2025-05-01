@@ -1,0 +1,35 @@
+package Interfaz;
+
+import Logica.*;
+import org.openstreetmap.gui.jmapviewer.*;
+import javax.swing.*;
+import java.awt.*;
+import java.util.List;
+
+public class MapaParque extends JFrame {
+    private JMapViewer map;
+
+    public MapaParque(GrafoParque grafo, List<Sendero> mst) {
+        super("Parque Nacional - Red de Senderos - Árbol Generador Mínimo");
+        setSize(800, 600);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        map = new JMapViewer();
+        map.setDisplayPosition(new Coordinate(-41.1, -71.2), 8);
+
+        for (Estacion e : grafo.getEstaciones()) {
+            MapMarkerDot marker = new MapMarkerDot(e.getLatitud(), e.getLongitud());
+            marker.setName(e.getNombre());
+            map.addMapMarker(marker);
+        }
+
+        for (Sendero s : mst) {
+            Coordinate c1 = new Coordinate(s.getOrigen().getLatitud(), s.getOrigen().getLongitud());
+            Coordinate c2 = new Coordinate(s.getDestino().getLatitud(), s.getDestino().getLongitud());
+            MapPolygonImpl linea = new MapPolygonImpl(c1, c2, c1);  
+            map.addMapPolygon(linea);
+        }
+
+        add(map, BorderLayout.CENTER);
+    }
+}
