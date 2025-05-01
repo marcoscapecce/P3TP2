@@ -1,0 +1,33 @@
+package Logica;
+
+import java.util.*;
+
+public class GrafoParque {
+    private List<Estacion> estaciones = new ArrayList<>();
+    private List<Sendero> senderos = new ArrayList<>();
+
+    public void agregarEstacion(Estacion e) {
+        estaciones.add(e);
+    }
+
+    public void agregarSendero(Sendero s) {
+        senderos.add(s);
+    }
+
+    public List<Estacion> getEstaciones() {
+        return estaciones;
+    }
+
+    public List<Sendero> getSenderos() {
+        return senderos;
+    }
+    public Estacion buscarEstacionPorNombre(String nombre) {
+        for (Estacion e : estaciones) {
+            if (e.getNombre().equalsIgnoreCase(nombre)) {
+                return e;
+            }
+        }
+        return null; 
+    }
+}
+
