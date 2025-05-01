@@ -1,0 +1,67 @@
+package Interfaz;
+
+import Logica.*;
+
+import javax.swing.*;
+import java.util.List;
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        GrafoParque grafo = new GrafoParque();
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("🔵 Carga de estaciones:");
+        System.out.print("¿Cuántas estaciones deseas ingresar? ");
+        int cantidadEstaciones = Integer.parseInt(scanner.nextLine());
+
+        for (int i = 0; i < cantidadEstaciones; i++) {
+            System.out.println("Estación #" + (i + 1));
+            System.out.print("Nombre: ");
+            String nombre = scanner.nextLine();
+            System.out.print("Latitud: ");
+            double latitud = Double.parseDouble(scanner.nextLine());
+            System.out.print("Longitud: ");
+            double longitud = Double.parseDouble(scanner.nextLine());
+
+            Estacion estacion = new Estacion(nombre, latitud, longitud);
+            grafo.agregarEstacion(estacion);
+        }
+
+        System.out.println("\n🛤️ Carga de senderos:");
+        System.out.print("¿Cuántos senderos deseas ingresar? ");
+        int cantidadSenderos = Integer.parseInt(scanner.nextLine());
+
+        for (int i = 0; i < cantidadSenderos; i++) {
+            System.out.println("Sendero #" + (i + 1));
+            System.out.print("Nombre estación origen: ");
+            String origenNombre = scanner.nextLine();
+            System.out.print("Nombre estación destino: ");
+            String destinoNombre = scanner.nextLine();
+            System.out.print("Impacto ambiental (1-10): ");
+            int impacto = Integer.parseInt(scanner.nextLine());
+
+            Estacion origen = grafo.buscarEstacionPorNombre(origenNombre);
+            Estacion destino = grafo.buscarEstacionPorNombre(destinoNombre);
+
+            if (origen != null && destino != null) {
+                grafo.agregarSendero(new Sendero(origen, destino, impacto));
+            } else {
+                System.out.println("⚠️ Estaciones no encontradas, sendero no creado.");
+            }
+        }
+
+        List<Sendero> mst = Prim.arbolGeneradorMinimo(grafo);
+
+        int impactoTotal = 0;
+        System.out.println("\n🌳 Senderos seleccionados (Árbol Generador Mínimo - Prim):");
+        for (Sendero s : mst) {
+            System.out.println("🔗 " + s.getOrigen().getNombre() + " ↔ " + s.getDestino().getNombre()
+                    + " (Impacto: " + s.getImpactoAmbiental() + ")");
+            impactoTotal += s.getImpactoAmbiental();
+        }
+        System.out.println("🌱 Impacto ambiental total: " + impactoTotal);
+
+        SwingUtilities.invokeLater(() -> new MapaParque(grafo, mst).setVisible(true));
+    }
+}
