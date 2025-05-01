@@ -1,0 +1,21 @@
+package Logica;
+
+import java.util.*;
+
+public class Kruskal {
+    public static List<Sendero> arbolGeneradorMinimo(GrafoParque grafo) {
+        List<Sendero> resultado = new ArrayList<>();
+        UnionFind uf = new UnionFind(grafo.getEstaciones());
+
+        List<Sendero> aristas = new ArrayList<>(grafo.getSenderos());
+        Collections.sort(aristas);
+
+        for (Sendero s : aristas) {
+            if (uf.union(s.getOrigen(), s.getDestino())) {
+                resultado.add(s);
+            }
+        }
+
+        return resultado;
+    }
+}
