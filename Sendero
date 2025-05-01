@@ -1,0 +1,30 @@
+package Logica;
+
+public class Sendero implements Comparable<Sendero> {
+    private Estacion origen;
+    private Estacion destino;
+    private int impactoAmbiental;
+
+    public Sendero(Estacion origen, Estacion destino, int impactoAmbiental) {
+        this.origen = origen;
+        this.destino = destino;
+        this.impactoAmbiental = impactoAmbiental;
+    }
+
+    public Estacion getOrigen() {
+        return origen;
+    }
+
+    public Estacion getDestino() {
+        return destino;
+    }
+
+    public int getImpactoAmbiental() {
+        return impactoAmbiental;
+    }
+
+    @Override
+    public int compareTo(Sendero otro) {
+        return Integer.compare(this.impactoAmbiental, otro.impactoAmbiental);
+    }
+}
